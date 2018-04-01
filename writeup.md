@@ -118,4 +118,6 @@ Concatenation was used in my implementation as another way of utilizing skip-con
 
 I did the check-points saving for every epoch in the traing process. From the training curve, the models started to overfit after the 9th epoch. I interrupted the training process, because the traning process was quite slow in my computer. I used ```weights.09.hdf5``` model to do the evaluation, the IOU metric was larger than 0.4.
 
+```model_training.ipynb``` and ```model_training.html``` are both in the ```code``` directory, same is the ```h5``` model file named ```weights.09.hdf5```. 
+
 Improvement could be made to improve the stability of traing process. Increasing the batch_size could be a good choice, increasing steps_per_epoch could be another one. They should both be able to make the model converge more smoothly.
