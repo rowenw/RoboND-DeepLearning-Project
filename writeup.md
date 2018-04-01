@@ -4,6 +4,7 @@
 [image2]: ./images/2.png
 [image3]: ./images/3.png
 [image4]: ./images/4.png
+[image5]: ./images/5.png
 
 ### FCN Architecture
 My final model consisted of the following layers:
@@ -93,7 +94,7 @@ Concatenation was used in my implementation as another way of utilizing skip-con
 
 ![image3]
 
-### Experiments
+### Experimentations
 
 1 The first set of hyper-parameters. From the training curves, the validation loss were bumping up and down, and the model was learning too fast in each step, learning rate should be reduce. 
 
@@ -105,10 +106,16 @@ Concatenation was used in my implementation as another way of utilizing skip-con
 	
 ![image4]
 
-2 The second set of hyper-parameters.
+2 The second set of hyper-parameters. I reduced the learning rate to 0.001. With smaller learning rate, I reduced the batch_size to speed up the traning process. And from last experimentation, the network should be able to converge in less than 20 epochs, I also reduced steps_per_epoch to speed up training process.
 
 	learning_rate = 0.001
-	batch_size = 32
+	batch_size = 16
 	num_epochs = 20
-	steps_per_epoch = 256
-	validation_steps = 64
+	steps_per_epoch = 200
+	validation_steps = 50
+	
+![image5]
+
+I did the check-points saving for every epoch in the traing process. From the training curve, the models started to overfit after the 9th epoch. I interrupted the training process, because the traning process was quite slow in my computer. I used ```weights.09.hdf5``` model to do the evaluation, the IOU metric was larger than 0.4.
+
+Improvement could be made to improve the stability of traing process. Increasing the batch_size could be a good choice, increasing steps_per_epoch could be another one. They should both be able to make the model converge more smoothly.
