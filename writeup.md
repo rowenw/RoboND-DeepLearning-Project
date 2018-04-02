@@ -94,6 +94,10 @@ Concatenation was used in my implementation as another way of utilizing skip-con
 
 ![image3]
 
+#### Generalization
+
+The training samples contain only human images from simulator, it is unlikely to work well for following other objects like dog, cat or something else instead of human. In order to work well for those objects, extra training samples need to be collected for furture training of this model.
+
 ### Experimentations
 
 1 The first set of hyper-parameters. From the training curves, the validation loss were bumping up and down, and the model was learning too fast in each step, learning rate should be reduce. 
@@ -106,7 +110,7 @@ Concatenation was used in my implementation as another way of utilizing skip-con
 	
 ![image4]
 
-2 The second set of hyper-parameters. I reduced the learning rate to 0.001. With smaller learning rate, I reduced the batch_size to speed up the traning process. And from last experimentation, the network should be able to converge in less than 20 epochs, I also reduced steps_per_epoch to speed up training process.
+2 The second set of hyper-parameters. I reduced the learning rate to 0.001. With smaller ```learning_rate```, I reduced the ```batch_size``` to speed up the traning process. And from last experimentation, the network should be able to converge in less than 20 epochs, I also reduced steps_per_epoch to speed up training process.
 
 	learning_rate = 0.001
 	batch_size = 16
