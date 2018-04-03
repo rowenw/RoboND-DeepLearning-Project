@@ -5,6 +5,7 @@
 [image3]: ./images/3.png
 [image4]: ./images/4.png
 [image5]: ./images/5.png
+[image6]: ./images/6.png
 
 ### FCN Architecture
 My final model consisted of the following layers:
@@ -120,8 +121,19 @@ The training samples contain only human images from simulator, it is unlikely to
 	
 ![image5]
 
-I did the check-points saving for every epoch in the traing process. From the training curve, the models started to overfit after the 9th epoch. I interrupted the training process, because the traning process was quite slow in my computer. I used ```weights.09.hdf5``` model to do the evaluation, the IOU metric was larger than 0.4.
+I did the check-points saving for every epoch in the traing process. From the training curve, the models started to overfit after the 9th epoch and the validation loss was still bumping up and down.
 
-```model_training.ipynb``` and ```model_training.html``` are both in the ```code``` directory, same is the ```h5``` model file named ```weights.09.hdf5```. 
 
-Improvement could be made to improve the stability of traing process. Increasing the batch_size could be a good choice, increasing steps_per_epoch could be another one. They should both be able to make the model converge more smoothly.
+3 The third set of hyper-parameters. I kept the ```learning_rate``` unchanged, and increase the ```batch_size``` to 32 and ```steps_per_epoch``` to 300. With this parameter setting, the model converged with a smoothly curve.
+
+	learning_rate = 0.001
+	batch_size = 32
+	num_epochs = 20
+	steps_per_epoch = 300
+	validation_steps = 50
+	
+![image6]
+
+```model_training.ipynb``` and ```model_training.html``` are both in the ```code``` directory, same is the ```h5``` model file named ```weights.19.hdf5```. 
+
+Improvement could be made to make the model have a better IOU value, like collecting more training data from simulator. If we want the model to following dogs or cats, we have to collect the training data for dogs and cats.
