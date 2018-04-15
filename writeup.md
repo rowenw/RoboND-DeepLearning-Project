@@ -5,7 +5,6 @@
 [image3]: ./images/3.png
 [image4]: ./images/4.png
 [image5]: ./images/5.png
-[image6]: ./images/6.png
 
 ### FCN Architecture
 My final model consisted of the following layers:
@@ -19,18 +18,25 @@ My final model consisted of the following layers:
 | Encoder_layer2, BatchNormazation		| Batch Normazation, 40x40x64 |
 | Encoder_layer3, SeparableConv2D     	| Separable Convolution |
 | Encoder_layer3, BatchNormazation		| Batch Normazation, 20x20x128 |
-| Convolution 1x1 | 1x1 Convolution,  20x20x128 |
+| Convolution 1x1 | 1x1 Convolution,  20x20x256 |
 | Decoder_layer1, Bilinear Upsampling   | Bilinear Upsampling, 40x40x128|
 | Decoder_layer1, Concatenation			| Concatenation with Encoder_layer2, 40x40x192 |
+| Decoder_layer1, SeparableConv2D     	| Separable Convolution, 40x40x128|
+| Decoder_layer1, BatchNormazation		| Batch Normazation, 40x40x128 |
 | Decoder_layer1, SeparableConv2D     	| Separable Convolution, 40x40x128|
 | Decoder_layer1, BatchNormazation		| Batch Normazation, 40x40x128 |
 | Decoder_layer2, Bilinear Upsampling   | Bilinear Upsampling, 80x80x128|
 | Decoder_layer2, Concatenation			| Concatenation with Encoder_layer1, 80x80x160 |
 | Decoder_layer2, SeparableConv2D     	| Separable Convolution, 80x80x64|
 | Decoder_layer2, BatchNormazation		| Batch Normazation, 80x80x64 |
+| Decoder_layer2, SeparableConv2D     	| Separable Convolution, 80x80x64|
+| Decoder_layer2, BatchNormazation		| Batch Normazation, 80x80x64 |
 | Decoder_layer3, Bilinear Upsampling   | Bilinear Upsampling, 160x160x64|
-| Decoder_layer3, SeparableConv2D     	| Separable Convolution, 160x160x32|
-| Decoder_layer3, BatchNormazation		| Batch Normazation, 160x160x32 |
+| Decoder_layer2, Concatenation			| Concatenation with inputs, 160x160x67 |
+| Decoder_layer2, SeparableConv2D     	| Separable Convolution, 160x160x32|
+| Decoder_layer2, BatchNormazation		| Batch Normazation, 160x1600x32 |
+| Decoder_layer2, SeparableConv2D     	| Separable Convolution, 160x160x32|
+| Decoder_layer2, BatchNormazation		| Batch Normazation, 160x1600x32 |
 | Convolution 3x3 | 1x1 stride, same padding, 160x160x3 |
 | Softmax				||
 
@@ -111,29 +117,20 @@ The training samples contain only human images from simulator, it is unlikely to
 	
 ![image4]
 
-2 The second set of hyper-parameters. I reduced the learning rate to 0.001. With smaller ```learning_rate```, I reduced the ```batch_size``` to speed up the traning process. And from last experimentation, the network should be able to converge in less than 20 epochs, I also reduced steps_per_epoch to speed up training process.
+2 Other sets of hyper-parameters was tried. The following set of parameters works. ```learning_rate``` was reduced to 0.005 to make the model converge without little bumping. Adam would tune the ```learning_rate``` so that ```learning_rate``` would be small than 0.005 in the training process. ```num_epochs``` was set to 60 in order to converge to a better model. 
 
-	learning_rate = 0.001
-	batch_size = 16
-	num_epochs = 20
-	steps_per_epoch = 200
+	learning_rate = 0.005
+	batch_size = 32
+	num_epochs = 60
+	steps_per_epoch = 100
 	validation_steps = 50
+	workers = 4
 	
 ![image5]
 
-I did the check-points saving for every epoch in the traing process. From the training curve, the models started to overfit after the 9th epoch and the validation loss was still bumping up and down.
+I did the check-points saving for every epoch in the traing process. From the training curve, model ```weights.57.hdf5``` was seleced because it has a smaller validation error.
 
 
-3 The third set of hyper-parameters. I kept the ```learning_rate``` unchanged, and increase the ```batch_size``` to 32 and ```steps_per_epoch``` to 300. With this parameter setting, the model converged with a smoothly curve.
+```model_training.ipynb``` and ```model_training.html``` are both in the ```code``` directory, same is the ```h5``` model file named ```weights.57.hdf5```. 
 
-	learning_rate = 0.001
-	batch_size = 32
-	num_epochs = 20
-	steps_per_epoch = 300
-	validation_steps = 50
-	
-![image6]
-
-```model_training.ipynb``` and ```model_training.html``` are both in the ```code``` directory, same is the ```h5``` model file named ```weights.19.hdf5```. 
-
-Improvement could be made to make the model have a better IOU value, like collecting more training data from simulator. If we want the model to following dogs or cats, we have to collect the training data for dogs and cats.
+Improvement could be made to make the model have a better IOU value, like collecting more training data from simulator or increace to num_epochs to a bigger value, like 80 or 100. If we want the model to following dogs or cats, we have to collect the training data for dogs and cats.
